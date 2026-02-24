@@ -1,0 +1,32 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "What was the total revenue in Q3 2024?",
+      "expected_answer": "placeholder - update after ingesting data",
+      "source_file": "financial_report.pdf",
+      "type": "simple_lookup",
+      "difficulty": "easy"
+    },
+    {
+      "id": 2,
+      "question": "How did revenue compare to the previous quarter?",
+      "expected_answer": "placeholder - update after ingesting data",
+      "source_file": "financial_report.pdf",
+      "type": "comparison",
+      "difficulty": "medium"
+    },
+    {
+      "id": 3,
+      "question": "What are the key financial metrics for the company?",
+      "expected_answer": "placeholder - update after ingesting data",
+      "source_file": "quarterly_presentation.pptx",
+      "type": "aggregation",
+      "difficulty": "medium"
+    }
+  ],
+  "metadata": {
+    "created": "2024-02-23",
+    "description": "Sample evaluation dataset - update with actual Q&A pairs after ingesting data"
+  }
+}
