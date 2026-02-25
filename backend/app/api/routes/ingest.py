@@ -25,6 +25,19 @@ from app.retrieval.embeddings import get_embedding_service
 router = APIRouter()
 
 
+def _add_extractions_to_graph(extractions: List[Dict[str, Any]], graph_store) -> tuple:
+    """Add extractions to graph store and return (entity_count, edge_count)."""
+    total_entities = 0
+    total_edges = 0
+    for extraction in extractions:
+        entities = extraction.get("entities", [])
+        relationships = extraction.get("relationships", [])
+        total_entities += len(entities)
+        total_edges += len(relationships)
+        graph_store.add_extraction(extraction)
+    return total_entities, total_edges
+
+
 def process_file_background(
     task_id: str,
     content: bytes,
@@ -276,29 +289,14 @@ def _process_file_standard(
     # STAGE 4: Graph building
     tracker.set_status(task_id, TaskStatus.GRAPH_BUILDING)
 
-    total_entities = 0
-    total_edges = 0
-
     # Use structured extraction for CSV, LLM-based for PDF/PPT
     filename_lower = filename.lower()
     if filename_lower.endswith(".csv"):
-        # CSV: Use deterministic structured extraction (no LLM calls, much faster)
         csv_extractions = parser.build_graph_extractions(content, filename)
-        for extraction in csv_extractions:
-            entities = extraction.get("entities", [])
-            relationships = extraction.get("relationships", [])
-            total_entities += len(entities)
-            total_edges += len(relationships)
-            graph_store.add_extraction(extraction)
+        total_entities, total_edges = _add_extractions_to_graph(csv_extractions, graph_store)
     else:
-        # PDF/PPT: Use LLM-based entity extraction
         extractions = graph_builder.extract_entities(chunks)
-        for extraction in extractions:
-            entities = extraction.get("entities", [])
-            relationships = extraction.get("relationships", [])
-            total_entities += len(entities)
-            total_edges += len(relationships)
-            graph_store.add_extraction(extraction)
+        total_entities, total_edges = _add_extractions_to_graph(extractions, graph_store)
 
     tracker.update_task(
         task_id,
@@ -359,23 +357,13 @@ async def ingest_files(files: List[UploadFile] = File(...)):
 
         # Build graph - use structured extraction for CSV, LLM for others
         if filename.endswith(".csv"):
-            # CSV: Use deterministic structured extraction (no LLM calls)
             csv_extractions = parser.build_graph_extractions(content, file.filename)
-            for extraction in csv_extractions:
-                entities = extraction.get("entities", [])
-                relationships = extraction.get("relationships", [])
-                total_entities += len(entities)
-                total_edges += len(relationships)
-                graph_store.add_extraction(extraction)
+            entities_count, edges_count = _add_extractions_to_graph(csv_extractions, graph_store)
         else:
-            # PDF/PPT: Use LLM-based entity extraction
             extractions = graph_builder.extract_entities(chunks)
-            for extraction in extractions:
-                entities = extraction.get("entities", [])
-                relationships = extraction.get("relationships", [])
-                total_entities += len(entities)
-                total_edges += len(relationships)
-                graph_store.add_extraction(extraction)
+            entities_count, edges_count = _add_extractions_to_graph(extractions, graph_store)
+        total_entities += entities_count
+        total_edges += edges_count
 
     # Persist stores
     vector_store.persist()
@@ -415,7 +403,7 @@ async def ingest_file_async(
     ):
         raise HTTPException(
             status_code=400,
-            detail=f"Unsupported file type. Supported: CSV, PDF, PPT, PPTX",
+            detail="Unsupported file type. Supported: CSV, PDF, PPT, PPTX",
         )
 
     # Create task

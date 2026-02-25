@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional as TypingOptional  # For global instance typing
 import networkx as nx
 
 from app.config import get_settings
@@ -219,7 +218,6 @@ class GraphStore:
     def _entity_to_node_id(self, entity: Dict[str, Any]) -> str:
         """Generate a unique node ID from entity."""
         name = entity.get("name", "unknown")
-        entity_type = entity.get("type", "entity")
         value = entity.get("value", "")
         period = entity.get("period", "")
 
@@ -403,7 +401,7 @@ class GraphStore:
         for node_id, data in self.graph.nodes(data=True):
             if data.get("type") == dimension_type:
                 values.add(data.get("name", node_id))
-        return sorted(list(values))
+        return sorted(values)
 
     def get_graph_summary(self) -> Dict[str, Any]:
         """Get a summary of the graph structure."""
@@ -455,7 +453,7 @@ class GraphStore:
 
 
 # Global instance (no lru_cache to allow proper reloading)
-_graph_store_instance: GraphStore = None
+_graph_store_instance: Optional[GraphStore] = None
 
 
 def get_graph_store() -> GraphStore:

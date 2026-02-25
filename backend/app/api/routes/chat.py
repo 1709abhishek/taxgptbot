@@ -1,5 +1,5 @@
 import uuid
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
 from app.api.schemas import ChatRequest, ChatResponse
 from app.llm.rag_pipeline import RAGPipeline
