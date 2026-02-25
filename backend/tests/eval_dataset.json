@@ -2,31 +2,183 @@
   "questions": [
     {
       "id": 1,
-      "question": "What was the total revenue in Q3 2024?",
-      "expected_answer": "placeholder - update after ingesting data",
-      "source_file": "financial_report.pdf",
+      "question": "What are the different taxpayer types in the tax data?",
+      "expected_answer": "The taxpayer types are: Individual, Corporation, Partnership, Trust, and Non-Profit",
+      "source_file": "tax_data_taxgpt.csv",
       "type": "simple_lookup",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "retrieval_type": "graph"
     },
     {
       "id": 2,
-      "question": "How did revenue compare to the previous quarter?",
-      "expected_answer": "placeholder - update after ingesting data",
-      "source_file": "financial_report.pdf",
-      "type": "comparison",
-      "difficulty": "medium"
+      "question": "What deduction types are available in the dataset?",
+      "expected_answer": "The deduction types are: Mortgage Interest, Charitable Contributions, Education Expenses, Medical Expenses, and Business Expenses",
+      "source_file": "tax_data_taxgpt.csv",
+      "type": "simple_lookup",
+      "difficulty": "easy",
+      "retrieval_type": "graph"
     },
     {
       "id": 3,
-      "question": "What are the key financial metrics for the company?",
-      "expected_answer": "placeholder - update after ingesting data",
-      "source_file": "quarterly_presentation.pptx",
+      "question": "What income sources are tracked in the tax records?",
+      "expected_answer": "The income sources are: Salary, Investment, Business Income, Capital Gains, Royalties, and Rental",
+      "source_file": "tax_data_taxgpt.csv",
+      "type": "simple_lookup",
+      "difficulty": "easy",
+      "retrieval_type": "graph"
+    },
+    {
+      "id": 4,
+      "question": "What states are represented in the tax data?",
+      "expected_answer": "The states are: CA, FL, GA, IL, MI, NC, NY, OH, PA, and TX",
+      "source_file": "tax_data_taxgpt.csv",
+      "type": "simple_lookup",
+      "difficulty": "easy",
+      "retrieval_type": "graph"
+    },
+    {
+      "id": 5,
+      "question": "What tax years are covered in the dataset?",
+      "expected_answer": "The tax years covered are 2019, 2020, 2021, 2022, and 2023",
+      "source_file": "tax_data_taxgpt.csv",
+      "type": "simple_lookup",
+      "difficulty": "easy",
+      "retrieval_type": "graph"
+    },
+    {
+      "id": 6,
+      "question": "What is adjusted gross income?",
+      "expected_answer": "Adjusted gross income (AGI) is your gross income minus certain adjustments. It includes wages, dividends, capital gains, business income, and other income, minus adjustments like IRA contributions, student loan interest, and alimony payments.",
+      "source_file": "i1040gi_taxgpt.pdf",
+      "type": "definition",
+      "difficulty": "easy",
+      "retrieval_type": "vector"
+    },
+    {
+      "id": 7,
+      "question": "What is the standard deduction?",
+      "expected_answer": "The standard deduction is a fixed dollar amount that reduces the income on which you are taxed. The amount varies based on filing status (single, married filing jointly, head of household, etc.).",
+      "source_file": "i1040gi_taxgpt.pdf",
+      "type": "definition",
+      "difficulty": "easy",
+      "retrieval_type": "vector"
+    },
+    {
+      "id": 8,
+      "question": "What is the earned income credit?",
+      "expected_answer": "The Earned Income Credit (EIC) is a refundable tax credit for low-to-moderate income working individuals and families. The credit amount depends on income, filing status, and number of qualifying children.",
+      "source_file": "i1040gi_taxgpt.pdf",
+      "type": "definition",
+      "difficulty": "medium",
+      "retrieval_type": "vector"
+    },
+    {
+      "id": 9,
+      "question": "How do I calculate taxable income?",
+      "expected_answer": "Taxable income is calculated by taking your adjusted gross income (AGI) and subtracting either the standard deduction or itemized deductions, plus any qualified business income deduction if applicable.",
+      "source_file": "i1040gi_taxgpt.pdf",
+      "type": "procedure",
+      "difficulty": "medium",
+      "retrieval_type": "vector"
+    },
+    {
+      "id": 10,
+      "question": "What tax credits are available?",
+      "expected_answer": "Common tax credits include: Child Tax Credit, Earned Income Credit, Education Credits (American Opportunity and Lifetime Learning), Child and Dependent Care Credit, and Retirement Savings Contributions Credit.",
+      "source_file": "i1040gi_taxgpt.pdf",
       "type": "aggregation",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "retrieval_type": "vector"
+    },
+    {
+      "id": 11,
+      "question": "What are the filing status options?",
+      "expected_answer": "The filing status options are: Single, Married Filing Jointly, Married Filing Separately, Head of Household, and Qualifying Surviving Spouse.",
+      "source_file": "i1040gi_taxgpt.pdf",
+      "type": "simple_lookup",
+      "difficulty": "easy",
+      "retrieval_type": "vector"
+    },
+    {
+      "id": 12,
+      "question": "What is the average tax rate for corporations in California?",
+      "expected_answer": "Based on the tax data, corporations in California have an average tax rate of approximately 23.95%.",
+      "source_file": "tax_data_taxgpt.csv",
+      "type": "aggregation",
+      "difficulty": "medium",
+      "retrieval_type": "graph"
+    },
+    {
+      "id": 13,
+      "question": "How many individual taxpayers are in the dataset?",
+      "expected_answer": "There are 954 individual taxpayer records in the dataset.",
+      "source_file": "tax_data_taxgpt.csv",
+      "type": "aggregation",
+      "difficulty": "medium",
+      "retrieval_type": "graph"
+    },
+    {
+      "id": 14,
+      "question": "What is the average income for investment income sources in 2023?",
+      "expected_answer": "The average income for investment income sources in 2023 is approximately $529,567.",
+      "source_file": "tax_data_taxgpt.csv",
+      "type": "aggregation",
+      "difficulty": "hard",
+      "retrieval_type": "graph"
+    },
+    {
+      "id": 15,
+      "question": "Compare the tax rates between individuals and corporations",
+      "expected_answer": "Based on the tax data, individuals have an average tax rate of about 23.40% while corporations also have similar rates. The difference varies by state and income source.",
+      "source_file": "tax_data_taxgpt.csv",
+      "type": "comparison",
+      "difficulty": "hard",
+      "retrieval_type": "graph"
+    },
+    {
+      "id": 16,
+      "question": "What are Form 1040 and 1040-SR Helpful Hints?",
+      "expected_answer": "Form 1040 and 1040-SR Helpful Hints is a section in the IRS instructions that provides guidance on which schedules you need based on your tax situation. It includes a table showing which Schedule (1-3) and Part (I or II) to use based on conditions like having additional income, adjustments to income, owing alternative minimum tax, claiming credits, or having other payments.",
+      "source_file": "i1040gi_taxgpt.pdf",
+      "page": 3,
+      "type": "definition",
+      "difficulty": "medium",
+      "retrieval_type": "vector"
+    },
+    {
+      "id": 17,
+      "question": "When should I use Schedule 1, Part I?",
+      "expected_answer": "You should use Schedule 1, Part I if you have additional income such as business or farm income or loss, unemployment compensation, or prize or award money.",
+      "source_file": "i1040gi_taxgpt.pdf",
+      "page": 3,
+      "type": "procedure",
+      "difficulty": "medium",
+      "retrieval_type": "vector"
+    },
+    {
+      "id": 18,
+      "question": "What is the difference between Form 1040 and Form 1040-SR?",
+      "expected_answer": "Everyone can file Form 1040. Form 1040-SR is available if you were born before January 2, 1959 (age 65 or older). Form 1040-SR has larger print and a standard deduction chart.",
+      "source_file": "i1040gi_taxgpt.pdf",
+      "page": 12,
+      "type": "comparison",
+      "difficulty": "easy",
+      "retrieval_type": "vector"
     }
   ],
   "metadata": {
-    "created": "2024-02-23",
-    "description": "Sample evaluation dataset - update with actual Q&A pairs after ingesting data"
+    "created": "2024-02-24",
+    "updated": "2024-02-24",
+    "description": "Evaluation dataset for TaxGPT Financial Chatbot - tests graph queries (CSV), vector queries (PDF/PPT), and hybrid queries",
+    "total_questions": 18,
+    "by_difficulty": {
+      "easy": 8,
+      "medium": 7,
+      "hard": 3
+    },
+    "by_retrieval_type": {
+      "graph": 8,
+      "vector": 10
+    }
   }
 }
