@@ -294,11 +294,51 @@ When a user asks "What taxpayer types are there?", the semantic similarity is mu
 |-----------|--------|-----|-------------|-----------|
 | **Vector DB** | ChromaDB | Free, local, persistent, Railway-compatible | Pinecone | Pinecone needs paid tier |
 | **Graph DB** | NetworkX | Zero setup, fast for <10K nodes | Neo4j | Neo4j overkill for demo |
-| **Embeddings** | Voyage AI `voyage-finance-2` | Finance-specific, 1024 dims | OpenAI | OpenAI is generic |
+| **Embeddings** | Voyage AI `voyage-finance-2` | Finance-specific (understands EBITDA, AGI, etc.), 1024 dims, $0.10/1M tokens | OpenAI `text-embedding-3-large` | OpenAI is generic, may miss financial nuance |
 | **LLM** | GPT-4o + Claude | Dual provider support | Single provider | More complexity |
 | **Entity Extraction** | LLM-based | Handles financial jargon | Spacy NER | Spacy misses nuance |
 | **Table Handling** | Markdown conversion | Preserves structure | Raw text | Raw loses context |
 | **Frontend** | React + Tailwind | Professional, full-stack | Streamlit | Streamlit is common |
+
+### Financial-Specific Embeddings: Voyage AI
+
+We use **Voyage AI's `voyage-finance-2`** model instead of generic embeddings like OpenAI's `text-embedding-3-large` or open-source alternatives.
+
+**Why Finance-Specific Embeddings Matter:**
+
+| Model | Dimensions | Finance Understanding | Cost |
+|-------|------------|----------------------|------|
+| `voyage-finance-2` | 1024 | ⭐⭐⭐⭐⭐ Native financial terminology | $0.10/1M tokens |
+| `text-embedding-3-large` | 3072 | ⭐⭐⭐ Generic, learns from context | $0.13/1M tokens |
+| `all-mpnet-base-v2` | 768 | ⭐⭐ Basic semantic | Free (local) |
+
+**Example: "What is EBITDA margin?"**
+
+```
+voyage-finance-2:
+  ✓ Understands EBITDA as Earnings Before Interest, Taxes, Depreciation, Amortization
+  ✓ Associates with profitability metrics, operating performance
+  ✓ Retrieves related: Operating Margin, Gross Margin, Net Income
+
+generic-embedding:
+  ⚠ Treats "EBITDA" as unknown acronym
+  ⚠ May retrieve unrelated content about "margin" (e.g., page margins)
+```
+
+**Configuration:**
+```bash
+# .env
+EMBEDDING_PROVIDER=voyage
+EMBEDDING_MODEL=voyage-finance-2
+VOYAGE_API_KEY=pa-...
+```
+
+**Fallback Support:**
+The system supports OpenAI embeddings as fallback if Voyage AI is unavailable:
+```bash
+EMBEDDING_PROVIDER=openai
+EMBEDDING_MODEL=text-embedding-3-large
+```
 
 ### Critical Design Decisions
 
