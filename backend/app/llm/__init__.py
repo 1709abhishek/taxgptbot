@@ -1,4 +1,4 @@
 from .rag_pipeline import RAGPipeline
-from .client import ClaudeClient
+from .client import LLMClient, ClaudeClient
 
-__all__ = ["RAGPipeline", "ClaudeClient"]
+__all__ = ["RAGPipeline", "LLMClient", "ClaudeClient"]

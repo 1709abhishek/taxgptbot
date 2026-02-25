@@ -6,6 +6,7 @@ import os
 class Settings(BaseSettings):
     # API Keys
     anthropic_api_key: str = ""
+    openai_api_key: str = ""
     voyage_api_key: str = ""
 
     # Embedding Configuration
@@ -19,8 +20,11 @@ class Settings(BaseSettings):
     # Logging
     log_level: str = "INFO"
 
-    # LLM Model (opus = best quality, sonnet = balanced, haiku = fast/cheap)
-    llm_model: str = "claude-sonnet-4-20250514"
+    # LLM Provider (openai or anthropic)
+    llm_provider: str = "openai"
+
+    # LLM Model (gpt-4o for OpenAI, claude-sonnet-4-20250514 for Anthropic)
+    llm_model: str = "gpt-4o"
 
     # Chunking
     chunk_size: int = 500

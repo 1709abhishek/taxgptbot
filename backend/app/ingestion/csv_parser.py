@@ -50,7 +50,12 @@ class CSVParser(BaseParser):
 
         # Create dimension summary chunks for each categorical column
         # These help answer questions like "What are the taxpayer types?"
-        categorical_cols = df.select_dtypes(include=['object']).columns
+        categorical_cols = list(df.select_dtypes(include=['object']).columns)
+
+        # Also add Tax Year even though it's numeric - it's a dimension for filtering
+        if 'Tax Year' in df.columns and 'Tax Year' not in categorical_cols:
+            categorical_cols.append('Tax Year')
+
         for col in categorical_cols:
             unique_vals = df[col].dropna().unique()
             if len(unique_vals) <= 20:  # Only create chunk if reasonable number
@@ -87,16 +92,33 @@ class CSVParser(BaseParser):
     def _create_dimension_chunk(self, df: pd.DataFrame, column: str, filename: str) -> str:
         """Create a dedicated chunk for a categorical dimension with full breakdown."""
         unique_vals = df[column].dropna().unique()
+        col_lower = column.lower().replace('_', ' ')
 
-        # Create semantic-rich content for better retrieval
+        # Create multiple question phrasings for better semantic matching
         content_parts = [
             f"=== {column.upper()} BREAKDOWN ===",
             f"Source: {filename}",
             f"",
-            f"Question: What are the different {column.lower().replace('_', ' ')}s in the tax data?",
-            f"Answer: There are {len(unique_vals)} different {column.lower().replace('_', ' ')}s:",
-            f"",
+            f"Question: What are the different {col_lower}s in the tax data?",
+            f"Question: What {col_lower}s are available in the dataset?",
+            f"Question: What {col_lower}s are tracked in the tax records?",
+            f"Question: List all {col_lower}s in the data.",
         ]
+
+        # Special phrasing for common columns
+        if "year" in col_lower:
+            content_parts.append(f"Question: What tax years are covered in the dataset?")
+            content_parts.append(f"Question: Which years are included in the tax data?")
+        if "income" in col_lower and "source" in col_lower:
+            content_parts.append(f"Question: What income sources are tracked?")
+            content_parts.append(f"Question: Where does the income come from?")
+        if "deduction" in col_lower:
+            content_parts.append(f"Question: What deduction types are available?")
+            content_parts.append(f"Question: What deductions can be claimed?")
+
+        content_parts.append(f"")
+        content_parts.append(f"Answer: There are {len(unique_vals)} different {col_lower}s:")
+        content_parts.append(f"")
 
         # Add each value with count and percentage
         total = len(df)

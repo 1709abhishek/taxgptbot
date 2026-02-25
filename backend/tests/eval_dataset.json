@@ -164,7 +164,223 @@
       "type": "comparison",
       "difficulty": "easy",
       "retrieval_type": "vector"
-    }
+    },
+    {
+  "id": 19,
+  "question": "What should I do if I receive an unsolicited email claiming to be from the IRS?",
+  "expected_answer": "If you receive an unsolicited email claiming to be from the IRS, forward the message to phishing@irs.gov. You may also report misuse of the IRS name, logos, forms, or other IRS property to the Treasury Inspector General for Tax Administration toll free at 800-366-4484.",
+  "source_file": "i1040gi_taxgpt.pdf",
+  "page": 79,
+  "type": "procedure",
+  "difficulty": "medium",
+  "retrieval_type": "vector"
+},
+{
+  "id": 20,
+  "question": "What happens if you fraudulently claim the Earned Income Credit?",
+  "expected_answer": "If you fraudulently take the EIC, you won't be allowed to take the credit for 10 years. You may also have to pay penalties. If the error is due to reckless or intentional disregard of the EIC rules, you won't be allowed to take the credit for 2 years.",
+  "source_file": "i1040gi_taxgpt.pdf",
+  "page": 39,
+  "type": "procedure",
+  "difficulty": "medium",
+  "retrieval_type": "vector"
+},
+{
+  "id": 21,
+  "question": "What is the investment income limit to qualify for the Earned Income Credit in 2023?",
+  "expected_answer": "Your investment income must be $11,000 or less to qualify for the Earned Income Credit. Investment income is calculated by adding the amounts from Form 1040 or 1040-SR Lines 2a, 2b, 3b, and Line 7.",
+  "source_file": "i1040gi_taxgpt.pdf",
+  "page": 39,
+  "type": "simple_lookup",
+  "difficulty": "hard",
+  "retrieval_type": "vector"
+},
+{
+  "id": 22,
+  "question": "What are the five requirements that must ALL be met to claim the Education Credit on Schedule 3?",
+  "expected_answer": "All five requirements must be met: (1) all foreign source gross income was from interest and dividends, (2) total foreign taxes weren't more than $300 (not more than $600 if married filing jointly), (3) you held the stock or bonds on which dividends or interest were paid for at least 16 days, (4) you aren't filing Form 4563 or excluding income from Puerto Rico, and (5) all foreign taxes were legally owed, not eligible for a refund or reduced tax rate under a treaty, and paid to countries that don't support terrorism.",
+  "source_file": "i1040gi_taxgpt.pdf",
+  "page": 102,
+  "type": "aggregation",
+  "difficulty": "hard",
+  "retrieval_type": "vector"
+},
+{
+  "id": 23,
+  "question": "What types of home improvements qualify for the Residential Clean Energy Credit on Line 5a?",
+  "expected_answer": "Qualifying properties include: qualified solar electric property, qualified solar water heating property for use in your home, qualified small wind energy property, qualified geothermal heat pump property, qualified battery storage technology, and qualified fuel cell property — all installed on or in connection with your home located in the United States.",
+  "source_file": "i1040gi_taxgpt.pdf",
+  "page": 103,
+  "type": "aggregation",
+  "difficulty": "medium",
+  "retrieval_type": "vector"
+},
+{
+  "id": 24,
+  "question": "What are the five conditions that qualify an individual as a 'continuing care patient' under §9818?",
+  "expected_answer": "A continuing care patient is an individual who, with respect to a provider or facility: (A) is undergoing a course of treatment for a serious and complex condition; (B) is undergoing a course of institutional or inpatient care; (C) is scheduled to undergo nonelective surgery, including postoperative care; (D) is pregnant and undergoing a course of treatment for the pregnancy; or (E) is or was determined to be terminally ill as determined under section 1861(dd)(3)(A) of the Social Security Act and is receiving treatment for such illness.",
+  "source_file": "i1040gi_taxgpt.pdf",
+  "type": "definition",
+  "difficulty": "hard",
+  "retrieval_type": "vector"
+},
+{
+  "id": 25,
+  "question": "What three requirements must a plan meet when notifying a continuing care patient of a provider or facility termination?",
+  "expected_answer": "The plan must: (A) notify each individual who is a continuing care patient of the termination and their right to elect continued transitional care on a timely basis; (B) provide the individual an opportunity to notify the plan of their need for transitional care; and (C) permit the patient to elect to continue receiving benefits under the same terms and conditions as before the termination, for the earlier of the 90-day period beginning on the notice date or the date the individual is no longer a continuing care patient.",
+  "source_file": "i1040gi_taxgpt.pdf",
+  "type": "aggregation",
+  "difficulty": "hard",
+  "retrieval_type": "vector"
+},
+{
+  "id": 26,
+  "question": "Who qualifies as a 'qualified taxpayer' for purposes of the mandatory 60-day extension under §7508A?",
+  "expected_answer": "A qualified taxpayer means: (A) any individual whose principal residence is located in a disaster area; (B) any taxpayer whose principal place of business (other than as an employee) is located in a disaster area; (C) any individual who is a relief worker affiliated with a recognized government or philanthropic organization assisting in a disaster area; (D) any taxpayer whose records necessary to meet a deadline are maintained in a disaster area; (E) any individual visiting a disaster area who was killed or injured as a result of the disaster; and (F) solely for a joint return, any spouse of an individual described in any preceding subparagraph.",
+  "source_file": "i1040gi_taxgpt.pdf",
+  "type": "definition",
+  "difficulty": "hard",
+  "retrieval_type": "vector"
+},
+{
+  "id": 27,
+  "question": "What is a 'disaster area' as defined under §7508A, and what triggers that designation?",
+  "expected_answer": "A disaster area means an area in which a major disaster occurs for which the President provides financial assistance under section 408 of the Robert T. Stafford Disaster Relief and Emergency Assistance Act (42 U.S.C. 5174).",
+  "source_file": "i1040gi_taxgpt.pdf",
+  "type": "definition",
+  "difficulty": "medium",
+  "retrieval_type": "vector"
+},
+{
+  "id": 28,
+  "question": "What conditions must a State meet before taking action to collect a past-due, legally enforceable State income tax obligation through federal overpayment offset?",
+  "expected_answer": "No State may take action until it: (A) notifies by certified mail with return receipt the person owing the past-due State income tax liability that the State proposes to take action; (B) gives such person at least 60 days to present evidence that all or part of such liability is not past-due or not legally enforceable; (C) considers any evidence presented by such person and determines that an amount of such debt is past-due and legally enforceable; and (D) satisfies such other conditions as the Secretary may prescribe to ensure the determination is valid and that the State has made reasonable efforts to obtain payment.",
+  "source_file": "usc26@118-78_taxgpt.pdf",
+  "type": "aggregation",
+  "difficulty": "hard",
+  "retrieval_type": "vector"
+},
+{
+  "id": 29,
+  "question": "What constitutes a 'past-due, legally enforceable State income tax obligation'?",
+  "expected_answer": "A past-due, legally enforceable State income tax obligation means a debt that: (A)(i) resulted from either a judgment rendered by a court of competent jurisdiction determining an amount of State income tax to be due, or a determination after an administrative hearing determining an amount of State income tax to be due, and (ii) is no longer subject to judicial review; or (B) resulted from a State income tax which has been assessed but not collected, the time for redetermination of which has expired, and which has not been delinquent for more than 10 years.",
+  "source_file": "usc26@118-78_taxgpt.pdf",
+  "type": "definition",
+  "difficulty": "hard",
+  "retrieval_type": "vector"
+},
+{
+  "id": 30,
+  "question": "What three conditions must a corporation meet to preserve its regulated investment company status after failing to satisfy subsection (b)(3) requirements for a quarter?",
+  "expected_answer": "A corporation that fails to meet the requirements shall nevertheless be considered to have satisfied them if: (i) following identification of the failure, a description of each asset causing the failure is set forth in a schedule filed with the Secretary; (ii) the failure to meet the requirements is due to reasonable cause and not willful neglect; and (iii) either the corporation disposes of the assets set forth on the schedule within 6 months after the last day of the quarter in which the failure was identified, or the requirements are otherwise met within the time period specified in subclause (I).",
+  "source_file": "usc26@118-78_taxgpt.pdf",
+  "type": "aggregation",
+  "difficulty": "hard",
+  "retrieval_type": "vector"
+},
+{
+  "id": 31,
+  "question": "What is the tax imposed on a corporation when subparagraph (A) applies due to a failure to satisfy subsection (b)(3) requirements, and how is it calculated?",
+  "expected_answer": "The tax imposed is equal to the greater of: (I) $50,000, or (II) the amount determined by multiplying the net income generated by the assets described in the schedule specified in subparagraph (A)(i) for the applicable period by the highest rate of tax specified in section 11. This tax is treated as an excise tax for purposes of subtitle F, to which the deficiency procedures of that subtitle apply.",
+  "source_file": "usc26@118-78_taxgpt.pdf",
+  "type": "procedure",
+  "difficulty": "hard",
+  "retrieval_type": "vector"
+},
+{
+  "id": 32,
+  "question": "What does the Savings Provision under Pub. L. 115-141 protect with respect to transactions occurring before March 23, 2018?",
+  "expected_answer": "The savings provision states that nothing in the amendment made by section 401(d)(3)(B)(ii) of Pub. L. 115-141 shall be construed to affect treatment of certain transactions occurring, property acquired, or items of income, loss, deduction, or credit taken into account prior to March 23, 2018, for purposes of determining liability for tax for periods ending after March 23, 2018. See section 401(e) of Pub. L. 115-141, set out as a note under section 23 of this title.",
+  "source_file": "usc26@118-78_taxgpt.pdf",
+  "type": "procedure",
+  "difficulty": "hard",
+  "retrieval_type": "vector"
+},
+{
+  "id": 33,
+  "question": "When did the repeal of §§50A and 50B take effect, and what authority enacted it?",
+  "expected_answer": "The repeal of §§50A and 50B was enacted by Pub. L. 98-369, div. A, title IV, §474(m)(2), on July 18, 1984, 98 Stat. 833. The repeal is applicable to taxable years beginning after December 31, 1983, and to carrybacks from such years, as set out in section 475(a) of Pub. L. 98-369 under section 21 of this title.",
+  "source_file": "usc26@118-78_taxgpt.pdf",
+  "type": "simple_lookup",
+  "difficulty": "medium",
+  "retrieval_type": "vector"
+},
+{
+  "id": 34,
+  "question": "Under §332, what three conditions must be met for a distribution to be considered a complete liquidation?",
+  "expected_answer": "A distribution is considered a complete liquidation only if: (1) the corporation receiving the property was, on the date of adoption of the plan of liquidation, and has continued to be until receipt of the property, the owner of stock meeting the requirements of section 1504(a)(2); and either (2) the distribution is by the other corporation in complete cancellation or redemption of all its stock, and transfer of all property occurs within the taxable year; or (3) such distribution is one of a series of distributions in complete cancellation or redemption of all its stock under a plan of liquidation under which transfer of all property is to be completed within 3 years from the close of the taxable year during which the first series of distributions is made.",
+  "source_file": "usc26@118-78_taxgpt.pdf",
+  "type": "aggregation",
+  "difficulty": "hard",
+  "retrieval_type": "vector"
+},
+{
+  "id": 35,
+  "question": "How are distributions from a regulated investment company or real estate investment trust treated under §332(c) when received by a corporation in complete liquidation?",
+  "expected_answer": "If a corporation receives a distribution from a regulated investment company or a real estate investment trust that is considered under subsection (b) as being in complete liquidation, the receiving corporation shall recognize and treat an amount equal to the deduction for dividends paid allowable to such company or trust by reason of such distribution as a dividend from such company or trust, notwithstanding any other provision of the chapter.",
+  "source_file": "usc26@118-78_taxgpt.pdf",
+  "type": "procedure",
+  "difficulty": "hard",
+  "retrieval_type": "vector"
+},
+{
+  "id": 36,
+  "question": "What action must the Secretary of Labor take if a State fails or refuses to enter into a modification of its unemployment compensation agreement within the three-week period under the termination provision?",
+  "expected_answer": "If any State fails or refuses, within the three-week period beginning on the date the Secretary of Labor proposes such modification, to enter into such a modification of its agreement, the Secretary of Labor shall terminate such agreement effective with the end of the last week which ends on or before the close of such three-week period.",
+  "source_file": "usc26@118-78_taxgpt.pdf",
+  "type": "procedure",
+  "difficulty": "medium",
+  "retrieval_type": "vector"
+},
+{
+  "id": 37,
+  "question": "What did the Emergency Unemployment Compensation Act of 1974 provide for weeks beginning before January 31, 1978?",
+  "expected_answer": "The Emergency Unemployment Compensation Act of 1974 (Pub. L. 93-572) provided that for weeks ending before January 31, 1978, qualified States could enter into agreements with the Secretary of Labor for the payment of emergency unemployment compensation to eligible individuals who had exhausted their rights to regular compensation under State law.",
+  "source_file": "usc26@118-78_taxgpt.pdf",
+  "type": "simple_lookup",
+  "difficulty": "medium",
+  "retrieval_type": "vector"
+},
+{
+  "id": 38,
+  "question": "How does demand elasticity affect who bears the burden of an excise tax?",
+  "expected_answer": "When demand is highly inelastic, most of the burden of an excise tax falls on consumers, because producers can pass on most of the cost by raising price. When demand is highly elastic, most of the burden falls on producers — price rises only slightly but quantity sold declines significantly.",
+  "source_file": "MIC_3e_Ch11_taxgpt.ppt",
+  "slide": "4-5",
+  "type": "comparison",
+  "difficulty": "medium",
+  "retrieval_type": "vector"
+},
+{
+  "id": 39,
+  "question": "What does welfare analysis show about the impact of an excise tax on a market?",
+  "expected_answer": "Welfare analysis shows that an excise tax in a market results in a deadweight loss, represented as areas H and I in the graph. Additionally, an excise tax results in a higher price and a lower quantity sold, and tax revenues can be represented as a shaded area in the supply-demand graph.",
+  "source_file": "MIC_3e_Ch11_taxgpt.ppt",
+  "slide": "8",
+  "type": "definition",
+  "difficulty": "medium",
+  "retrieval_type": "vector"
+},
+{
+  "id": 40,
+  "question": "How does the United States compare to other industrialized countries in terms of overall tax receipts?",
+  "expected_answer": "According to OECD data from 2011, the United States has a relatively low overall rate of taxation compared to other industrialized countries.",
+  "source_file": "MIC_3e_Ch11_taxgpt.ppt",
+  "slide": "14",
+  "type": "comparison",
+  "difficulty": "easy",
+  "retrieval_type": "vector"
+},
+{
+  "id": 41,
+  "question": "What does the relationship between the top marginal federal tax rate and economic growth suggest according to the data shown in Chapter 11?",
+  "expected_answer": "Based on data from 1950-2010, the graph indicates that lowering the top marginal federal income tax rate does not appear to be correlated with higher economic growth, as shown by average economic growth by decade as a percentage.",
+  "source_file": "MIC_3e_Ch11_taxgpt.ppt",
+  "slide": "15",
+  "type": "simple_lookup",
+  "difficulty": "medium",
+  "retrieval_type": "vector"
+}
   ],
   "metadata": {
     "created": "2024-02-24",
