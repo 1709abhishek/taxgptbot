@@ -250,6 +250,182 @@ class GraphStore:
         """Get number of edges in the graph."""
         return self.graph.number_of_edges()
 
+    def query_transactions(
+        self,
+        taxpayer_type: str = None,
+        state: str = None,
+        income_source: str = None,
+        deduction_type: str = None,
+        tax_year: str = None,
+    ) -> List[Dict[str, Any]]:
+        """
+        Query transaction nodes with optional filters.
+
+        Returns list of transaction data matching the filters.
+        """
+        transactions = []
+
+        # Find all transaction nodes
+        for node_id, data in self.graph.nodes(data=True):
+            if data.get("type") != "transaction":
+                continue
+
+            # Check filters by traversing relationships
+            matches = True
+
+            if taxpayer_type:
+                # Check if transaction is connected to this taxpayer type
+                connected = False
+                for neighbor in self.graph.neighbors(node_id):
+                    edge = self.graph.edges[node_id, neighbor]
+                    if edge.get("relation") == "FILED_BY" and neighbor.lower() == taxpayer_type.lower():
+                        connected = True
+                        break
+                if not connected:
+                    matches = False
+
+            if state and matches:
+                connected = False
+                for neighbor in self.graph.neighbors(node_id):
+                    edge = self.graph.edges[node_id, neighbor]
+                    if edge.get("relation") == "FILED_IN" and neighbor.lower() == state.lower():
+                        connected = True
+                        break
+                if not connected:
+                    matches = False
+
+            if income_source and matches:
+                connected = False
+                for neighbor in self.graph.neighbors(node_id):
+                    edge = self.graph.edges[node_id, neighbor]
+                    if edge.get("relation") == "HAS_INCOME" and neighbor.lower() == income_source.lower():
+                        connected = True
+                        break
+                if not connected:
+                    matches = False
+
+            if deduction_type and matches:
+                connected = False
+                for neighbor in self.graph.neighbors(node_id):
+                    edge = self.graph.edges[node_id, neighbor]
+                    if edge.get("relation") == "CLAIMED_DEDUCTION" and neighbor.lower() == deduction_type.lower():
+                        connected = True
+                        break
+                if not connected:
+                    matches = False
+
+            if tax_year and matches:
+                connected = False
+                for neighbor in self.graph.neighbors(node_id):
+                    edge = self.graph.edges[node_id, neighbor]
+                    if edge.get("relation") == "FOR_YEAR" and neighbor == str(tax_year):
+                        connected = True
+                        break
+                if not connected:
+                    matches = False
+
+            if matches:
+                transactions.append({
+                    "node_id": node_id,
+                    "income": data.get("income", 0),
+                    "deductions": data.get("deductions", 0),
+                    "taxable_income": data.get("taxable_income", 0),
+                    "tax_rate": data.get("tax_rate", 0),
+                    "tax_owed": data.get("tax_owed", 0),
+                    "date": data.get("date", ""),
+                })
+
+        return transactions
+
+    def query_aggregate(
+        self,
+        taxpayer_type: str = None,
+        state: str = None,
+        income_source: str = None,
+        deduction_type: str = None,
+        tax_year: str = None,
+    ) -> Dict[str, Any]:
+        """
+        Query aggregations like avg tax rate, total income, etc.
+
+        Returns aggregated statistics for transactions matching filters.
+        """
+        transactions = self.query_transactions(
+            taxpayer_type=taxpayer_type,
+            state=state,
+            income_source=income_source,
+            deduction_type=deduction_type,
+            tax_year=tax_year,
+        )
+
+        if not transactions:
+            return {
+                "count": 0,
+                "message": "No matching transactions found",
+            }
+
+        # Compute aggregations
+        incomes = [t["income"] for t in transactions]
+        deductions = [t["deductions"] for t in transactions]
+        tax_rates = [t["tax_rate"] for t in transactions]
+        taxes_owed = [t["tax_owed"] for t in transactions]
+
+        return {
+            "count": len(transactions),
+            "total_income": sum(incomes),
+            "avg_income": sum(incomes) / len(incomes),
+            "total_deductions": sum(deductions),
+            "avg_deductions": sum(deductions) / len(deductions),
+            "avg_tax_rate": sum(tax_rates) / len(tax_rates),
+            "total_tax_owed": sum(taxes_owed),
+            "avg_tax_owed": sum(taxes_owed) / len(taxes_owed),
+            "filters_applied": {
+                "taxpayer_type": taxpayer_type,
+                "state": state,
+                "income_source": income_source,
+                "deduction_type": deduction_type,
+                "tax_year": tax_year,
+            },
+        }
+
+    def get_dimension_values(self, dimension_type: str) -> List[str]:
+        """
+        Get all unique values for a dimension type.
+
+        Args:
+            dimension_type: One of 'taxpayer_type', 'state', 'income_source',
+                          'deduction_type', 'tax_year'
+
+        Returns:
+            List of unique values for that dimension
+        """
+        values = set()
+        for node_id, data in self.graph.nodes(data=True):
+            if data.get("type") == dimension_type:
+                values.add(data.get("name", node_id))
+        return sorted(list(values))
+
+    def get_graph_summary(self) -> Dict[str, Any]:
+        """Get a summary of the graph structure."""
+        summary = {
+            "total_nodes": self.node_count(),
+            "total_edges": self.edge_count(),
+            "node_types": {},
+            "relationship_types": {},
+        }
+
+        # Count nodes by type
+        for _, data in self.graph.nodes(data=True):
+            node_type = data.get("type", "unknown")
+            summary["node_types"][node_type] = summary["node_types"].get(node_type, 0) + 1
+
+        # Count edges by relationship type
+        for _, _, data in self.graph.edges(data=True):
+            rel_type = data.get("relation", "unknown")
+            summary["relationship_types"][rel_type] = summary["relationship_types"].get(rel_type, 0) + 1
+
+        return summary
+
     def persist(self) -> None:
         """Save graph to disk."""
         self.persist_path.parent.mkdir(parents=True, exist_ok=True)

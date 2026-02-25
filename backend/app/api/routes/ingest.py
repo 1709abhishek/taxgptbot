@@ -217,6 +217,9 @@ def _process_file_standard(
 ) -> None:
     """
     Standard (non-streaming) processing for smaller files.
+
+    For CSV files, uses deterministic structured graph extraction.
+    For PDF/PPT files, uses LLM-based entity extraction.
     """
     # STAGE 1: Parsing
     tracker.set_status(task_id, TaskStatus.PARSING)
@@ -273,16 +276,29 @@ def _process_file_standard(
     # STAGE 4: Graph building
     tracker.set_status(task_id, TaskStatus.GRAPH_BUILDING)
 
-    extractions = graph_builder.extract_entities(chunks)
     total_entities = 0
     total_edges = 0
 
-    for extraction in extractions:
-        entities = extraction.get("entities", [])
-        relationships = extraction.get("relationships", [])
-        total_entities += len(entities)
-        total_edges += len(relationships)
-        graph_store.add_extraction(extraction)
+    # Use structured extraction for CSV, LLM-based for PDF/PPT
+    filename_lower = filename.lower()
+    if filename_lower.endswith(".csv"):
+        # CSV: Use deterministic structured extraction (no LLM calls, much faster)
+        csv_extractions = parser.build_graph_extractions(content, filename)
+        for extraction in csv_extractions:
+            entities = extraction.get("entities", [])
+            relationships = extraction.get("relationships", [])
+            total_entities += len(entities)
+            total_edges += len(relationships)
+            graph_store.add_extraction(extraction)
+    else:
+        # PDF/PPT: Use LLM-based entity extraction
+        extractions = graph_builder.extract_entities(chunks)
+        for extraction in extractions:
+            entities = extraction.get("entities", [])
+            relationships = extraction.get("relationships", [])
+            total_entities += len(entities)
+            total_edges += len(relationships)
+            graph_store.add_extraction(extraction)
 
     tracker.update_task(
         task_id,
@@ -341,14 +357,25 @@ async def ingest_files(files: List[UploadFile] = File(...)):
             metadatas=metadatas,
         )
 
-        # Extract entities and build graph
-        extractions = graph_builder.extract_entities(chunks)
-        for extraction in extractions:
-            entities = extraction.get("entities", [])
-            relationships = extraction.get("relationships", [])
-            total_entities += len(entities)
-            total_edges += len(relationships)
-            graph_store.add_extraction(extraction)
+        # Build graph - use structured extraction for CSV, LLM for others
+        if filename.endswith(".csv"):
+            # CSV: Use deterministic structured extraction (no LLM calls)
+            csv_extractions = parser.build_graph_extractions(content, file.filename)
+            for extraction in csv_extractions:
+                entities = extraction.get("entities", [])
+                relationships = extraction.get("relationships", [])
+                total_entities += len(entities)
+                total_edges += len(relationships)
+                graph_store.add_extraction(extraction)
+        else:
+            # PDF/PPT: Use LLM-based entity extraction
+            extractions = graph_builder.extract_entities(chunks)
+            for extraction in extractions:
+                entities = extraction.get("entities", [])
+                relationships = extraction.get("relationships", [])
+                total_entities += len(entities)
+                total_edges += len(relationships)
+                graph_store.add_extraction(extraction)
 
     # Persist stores
     vector_store.persist()
