@@ -13,10 +13,15 @@ import {
   Sparkles,
   Database,
   GitBranch,
-  Clock
+  Clock,
+  Info,
+  Lock
 } from 'lucide-react'
 import { api, IngestResponse } from '../services/api'
 import { cn } from '../lib/utils'
+
+// Upload is disabled for demo - files are pre-loaded
+const UPLOAD_DISABLED = true
 
 export default function FileUpload() {
   const [files, setFiles] = useState<File[]>([])
@@ -90,8 +95,46 @@ export default function FileUpload() {
 
   return (
     <div className="space-y-6">
+      {/* Disabled Notice Banner */}
+      {UPLOAD_DISABLED && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass rounded-2xl p-5 border border-amber-500/20 bg-amber-500/5"
+        >
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
+              <Info className="w-5 h-5 text-amber-400" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground flex items-center gap-2">
+                <Lock className="w-4 h-4 text-amber-400" />
+                Upload Disabled for Demo
+              </h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                All financial documents have been pre-loaded successfully. Upload functionality is disabled to prevent excessive API load during the demo.
+              </p>
+              <div className="flex flex-wrap gap-3 mt-3 text-xs">
+                <span className="flex items-center gap-1.5 px-2.5 py-1 bg-green-500/10 text-green-400 rounded-lg">
+                  <CheckCircle className="w-3.5 h-3.5" />
+                  100K+ vectors indexed
+                </span>
+                <span className="flex items-center gap-1.5 px-2.5 py-1 bg-blue-500/10 text-blue-400 rounded-lg">
+                  <Database className="w-3.5 h-3.5" />
+                  5K+ graph nodes
+                </span>
+                <span className="flex items-center gap-1.5 px-2.5 py-1 bg-purple-500/10 text-purple-400 rounded-lg">
+                  <GitBranch className="w-3.5 h-3.5" />
+                  25K+ relationships
+                </span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
       {/* Main Upload Card */}
-      <div className="glass rounded-2xl p-6">
+      <div className={cn("glass rounded-2xl p-6", UPLOAD_DISABLED && "opacity-50 pointer-events-none")}>
         <div className="flex items-center gap-3 mb-6">
           <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
             <Upload className="w-5 h-5 text-primary" />
