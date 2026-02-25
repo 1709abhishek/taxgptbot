@@ -2,9 +2,11 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install minimal system dependencies (removed LibreOffice to speed up build)
+# Install minimal system dependencies + git-lfs for large files
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
+    git-lfs \
+    && git lfs install \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
@@ -14,8 +16,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY backend/app ./app
 
-# Create data directories
-RUN mkdir -p data/raw data/chroma_db
+# Copy pre-built data (ChromaDB + graph)
+COPY backend/data ./data
 
 ENV PORT=8000
 EXPOSE 8000
