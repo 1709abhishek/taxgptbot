@@ -931,8 +931,8 @@ Every design decision includes:
 
 **Abhishek Jain**
 
-- LinkedIn: [linkedin.com/in/abhishekjain](https://linkedin.com/in/abhishekjain)
-- GitHub: [github.com/abhishekjain](https://github.com/abhishekjain)
+- LinkedIn: [linkedin.com/in/1709abhishek](https://linkedin.com/in/1709abhishek)
+- GitHub: [github.com/1709abhishek](https://github.com/1709abhishek)
 
 ---
 
