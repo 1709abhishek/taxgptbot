@@ -5,19 +5,21 @@ WORKDIR /app
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Install gdown for Google Drive downloads
+RUN pip install gdown
+
 # Copy application code
 COPY backend/app ./app
 
-# Download pre-built data from GitHub release
+# Download pre-built data from Google Drive
 RUN mkdir -p data && \
-    curl -L https://github.com/1709abhishek/taxgptbot/releases/download/v1.0.0/taxgpt-data.tar.gz -o /tmp/data.tar.gz && \
+    gdown "1qiCbwuwx42Eqyzw9mGL5r6MOt3DxDF49" -O /tmp/data.tar.gz && \
     tar -xzf /tmp/data.tar.gz -C data && \
     rm /tmp/data.tar.gz
 
