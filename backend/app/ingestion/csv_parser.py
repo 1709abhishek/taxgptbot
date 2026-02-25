@@ -48,6 +48,22 @@ class CSVParser(BaseParser):
             )
         )
 
+        # Create dimension summary chunks for each categorical column
+        # These help answer questions like "What are the taxpayer types?"
+        categorical_cols = df.select_dtypes(include=['object']).columns
+        for col in categorical_cols:
+            unique_vals = df[col].dropna().unique()
+            if len(unique_vals) <= 20:  # Only create chunk if reasonable number
+                dim_content = self._create_dimension_chunk(df, col, filename)
+                chunks.append(
+                    self._create_chunk(
+                        content=dim_content,
+                        filename=filename,
+                        chunk_type="dimension_summary",
+                        extra_metadata={"dimension": col, "unique_count": len(unique_vals)},
+                    )
+                )
+
         # Create batched chunks (groups of rows as markdown tables)
         num_batches = min((len(df) + self.batch_size - 1) // self.batch_size, self.max_batches)
 
@@ -68,16 +84,66 @@ class CSVParser(BaseParser):
 
         return chunks
 
+    def _create_dimension_chunk(self, df: pd.DataFrame, column: str, filename: str) -> str:
+        """Create a dedicated chunk for a categorical dimension with full breakdown."""
+        unique_vals = df[column].dropna().unique()
+
+        # Create semantic-rich content for better retrieval
+        content_parts = [
+            f"=== {column.upper()} BREAKDOWN ===",
+            f"Source: {filename}",
+            f"",
+            f"Question: What are the different {column.lower().replace('_', ' ')}s in the tax data?",
+            f"Answer: There are {len(unique_vals)} different {column.lower().replace('_', ' ')}s:",
+            f"",
+        ]
+
+        # Add each value with count and percentage
+        total = len(df)
+        for val in sorted(unique_vals, key=str):
+            count = (df[column] == val).sum()
+            pct = (count / total) * 100
+            content_parts.append(f"• {val}: {count} records ({pct:.1f}%)")
+
+        # Add related statistics if numeric columns exist
+        numeric_cols = df.select_dtypes(include=['number']).columns.tolist()
+        if numeric_cols and len(unique_vals) <= 10:
+            content_parts.append("")
+            content_parts.append(f"Statistics by {column}:")
+            for val in sorted(unique_vals, key=str):
+                subset = df[df[column] == val]
+                if "Income" in numeric_cols or "income" in [c.lower() for c in numeric_cols]:
+                    income_col = [c for c in numeric_cols if "income" in c.lower()][0]
+                    avg_income = subset[income_col].mean()
+                    content_parts.append(f"  {val}: avg income ${avg_income:,.0f}")
+
+        return "\n".join(content_parts)
+
     def _create_summary(self, df: pd.DataFrame, filename: str) -> str:
         """Create a summary of the CSV data."""
         summary_parts = [
             f"CSV Data Summary from {filename}:",
             f"Total records: {len(df)}",
             f"Columns: {', '.join(df.columns)}",
-            "",
-            "Sample data (first 5 rows):",
-            df.head().to_markdown(index=False),
         ]
+
+        # Add unique values for categorical columns (critical for retrieval)
+        categorical_cols = df.select_dtypes(include=['object']).columns
+        if len(categorical_cols) > 0:
+            summary_parts.append("")
+            summary_parts.append("=== CATEGORICAL DATA BREAKDOWN ===")
+            for col in categorical_cols:
+                unique_vals = df[col].dropna().unique()
+                if len(unique_vals) <= 20:  # Only list if reasonable number
+                    summary_parts.append(f"")
+                    summary_parts.append(f"{col} - {len(unique_vals)} unique values:")
+                    for val in sorted(unique_vals, key=str):
+                        count = (df[col] == val).sum()
+                        summary_parts.append(f"  • {val}: {count} records")
+
+        summary_parts.append("")
+        summary_parts.append("Sample data (first 5 rows):")
+        summary_parts.append(df.head().to_markdown(index=False))
 
         # Add column statistics for numeric columns
         numeric_cols = df.select_dtypes(include=['number']).columns
