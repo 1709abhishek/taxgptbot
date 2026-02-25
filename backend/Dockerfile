@@ -9,14 +9,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-COPY requirements.txt .
+COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY app ./app
-COPY data ./data
+COPY backend/app ./app
 
-# Create data directories
+# Create data directories (don't copy data - it will be created at runtime)
 RUN mkdir -p data/raw data/chroma_db
 
 EXPOSE 8000
