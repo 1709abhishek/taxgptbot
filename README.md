@@ -6,7 +6,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18+-61DAFB.svg)](https://reactjs.org/)
 
-[Demo Video](#demo-video) | [Evaluation Results](#evaluation-results) | [API Docs](#api-reference)
+[Demo Video](https://www.loom.com/share/ca937286f2f64c5aabc0133c34ead84c) | [Live Demo](https://taxgptbot.vercel.app/) | [Evaluation Results](#evaluation-results) | [API Docs](#api-reference)
 
 ---
 
@@ -577,10 +577,160 @@ cd backend
 
 # Run all tests
 pytest tests/ -v
-
-# Run evaluation
-python scripts/evaluate.py
 ```
+
+### Running Evaluation
+
+The evaluation suite tests the RAG pipeline against 41 pre-defined questions across all data sources (CSV, PDF, PPT).
+
+```bash
+# From project root directory
+
+# Run full evaluation (uses backend/tests/eval_dataset.json)
+python scripts/evaluate.py
+
+# Run with custom evaluation file
+python scripts/evaluate.py --eval-file /path/to/custom_eval.json
+```
+
+**Expected Output:**
+```
+Q: What are the different taxpayer types in the tax data?
+A: The taxpayer types in the tax data are: Corporation, Individual, Non-Profit, Partnership, and Trust...
+Confidence: 0.92
+  Source found at rank 1
+
+Q: What is adjusted gross income?
+A: Adjusted Gross Income (AGI) is your total gross income minus certain adjustments...
+Confidence: 0.85
+  Source found at rank 1
+
+... (41 questions total)
+
+==================================================
+EVALUATION RESULTS (41 questions)
+==================================================
+Recall@5: 80.49%
+MRR@5: 0.671
+
+Store Statistics:
+  Vector count: 100280
+  Graph nodes: 5031
+  Graph edges: 25000
+```
+
+### Testing Individual Queries via API
+
+```bash
+# Start the backend server first
+cd backend && uvicorn app.main:app --reload --port 8000
+
+# Test a single query via curl
+curl -X POST http://localhost:8000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "What are the different taxpayer types?"}'
+
+# Pretty-printed output
+curl -s -X POST http://localhost:8000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "What is adjusted gross income?"}' | python -m json.tool
+```
+
+**Sample Response:**
+```json
+{
+  "answer": "Adjusted Gross Income (AGI) is your total gross income minus...",
+  "confidence": 0.85,
+  "sources": [
+    {
+      "file": "i1040gi_taxgpt.pdf",
+      "page": 12,
+      "snippet": "Your adjusted gross income (AGI) is...",
+      "score": 0.87
+    }
+  ],
+  "graph_path": [...]
+}
+```
+
+### Testing Specific Source Types
+
+```bash
+# Test CSV retrieval
+curl -s -X POST http://localhost:8000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "What tax years are covered in the dataset?"}' | python -m json.tool
+
+# Test PDF retrieval
+curl -s -X POST http://localhost:8000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "What is the earned income credit?"}' | python -m json.tool
+
+# Test PPT retrieval
+curl -s -X POST http://localhost:8000/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"message": "How does demand elasticity affect excise tax burden?"}' | python -m json.tool
+```
+
+### Evaluation Dataset Format
+
+The evaluation dataset (`backend/tests/eval_dataset.json`) follows this structure:
+
+```json
+{
+  "questions": [
+    {
+      "id": 1,
+      "question": "What are the different taxpayer types?",
+      "expected_answer": "The taxpayer types are: Individual, Corporation...",
+      "source_file": "tax_data_taxgpt.csv",
+      "type": "simple_lookup",
+      "difficulty": "easy",
+      "retrieval_type": "graph"
+    }
+  ],
+  "metadata": {
+    "total_questions": 41,
+    "by_difficulty": {"easy": 8, "medium": 15, "hard": 18},
+    "by_retrieval_type": {"graph": 8, "vector": 33}
+  }
+}
+```
+
+**Question Fields:**
+| Field | Description |
+|-------|-------------|
+| `question` | The query to test |
+| `expected_answer` | Reference answer (for manual verification) |
+| `source_file` | Expected source file in top-5 results |
+| `type` | Query type: `simple_lookup`, `definition`, `procedure`, `aggregation`, `comparison` |
+| `difficulty` | `easy`, `medium`, `hard` |
+| `retrieval_type` | `vector` or `graph` |
+
+### Adding Custom Evaluation Questions
+
+1. Edit `backend/tests/eval_dataset.json`
+2. Add new question object:
+```json
+{
+  "id": 42,
+  "question": "Your new question here?",
+  "expected_answer": "The expected answer...",
+  "source_file": "source_document.pdf",
+  "type": "definition",
+  "difficulty": "medium",
+  "retrieval_type": "vector"
+}
+```
+3. Run evaluation: `python scripts/evaluate.py`
+
+### Evaluation Metrics Explained
+
+| Metric | Formula | What It Measures |
+|--------|---------|------------------|
+| **Recall@5** | `(correct source in top 5) / total` | % of questions where correct source appears in top 5 results |
+| **MRR@5** | `mean(1 / rank)` | How high the correct source ranks (1.0 = always first) |
+| **Confidence** | `max(similarity scores)` | Model's certainty in the answer (0-1) |
 
 ---
 
@@ -735,7 +885,7 @@ taxgpt-financial-chatbot/
 
 ## Demo Video
 
-[Watch the 3-5 minute demo](#) showing:
+[**Watch the Demo Video**](https://www.loom.com/share/ca937286f2f64c5aabc0133c34ead84c) showing:
 
 1. **Simple Query** (30s): "What is adjusted gross income?" → PDF answer with citation
 2. **CSV Query** (30s): "What taxpayer types?" → Dimension chunk retrieval
