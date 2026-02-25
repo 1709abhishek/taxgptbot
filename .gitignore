@@ -41,8 +41,9 @@ env/
 
 # Data files (keep structure, ignore content)
 backend/data/raw/*
-backend/data/chroma_db/*
-backend/data/*.pkl
+# Allow chroma_db and graph pickle for deployment (pre-built indexes)
+# backend/data/chroma_db/*
+# backend/data/*.pkl
 !backend/data/.gitkeep
 
 # Node
