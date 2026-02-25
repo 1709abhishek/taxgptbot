@@ -6,3 +6,7 @@ watchPatterns = ["backend/**"]
 [deploy]
 healthcheckPath = "/health"
 healthcheckTimeout = 300
+
+[[mounts]]
+source = "chroma_data"
+destination = "/app/data/chroma_db"
