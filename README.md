@@ -29,16 +29,31 @@
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/yourusername/taxgpt-financial-chatbot.git
-cd taxgpt-financial-chatbot
+git clone https://github.com/1709abhishek/taxgptbot.git
+cd taxgptbot
 
 # 2. Set up environment variables
 cp .env.example backend/.env
 # Edit backend/.env with your API keys (ANTHROPIC_API_KEY, VOYAGE_API_KEY, OPENAI_API_KEY)
 
-# 3. Run with Docker (recommended)
+# 3. Download pre-built data (ChromaDB + Knowledge Graph)
+# Option A: Download from Google Drive
+# https://drive.google.com/file/d/1qiCbwuwx42Eqyzw9mGL5r6MOt3DxDF49/view?usp=sharing
+# Extract to backend/data/
+
+# Option B: Use gdown (automated)
+pip install gdown
+gdown "1qiCbwuwx42Eqyzw9mGL5r6MOt3DxDF49" -O /tmp/data.tar.gz
+mkdir -p backend/data && tar -xzf /tmp/data.tar.gz -C backend/data
+
+# 4. Run with Docker (recommended)
 docker-compose up --build
 ```
+
+**Pre-built Data Download:**
+| File | Contents | Size |
+|------|----------|------|
+| [taxgpt-data.tar.gz](https://drive.google.com/file/d/1qiCbwuwx42Eqyzw9mGL5r6MOt3DxDF49/view?usp=sharing) | ChromaDB (100K vectors) + graph.pkl (5K nodes) | 514 MB |
 
 The app will be available at:
 - **Frontend**: http://localhost:3000
