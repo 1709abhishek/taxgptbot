@@ -1,12 +1,12 @@
 import { cn } from '../lib/utils'
 
-interface TaxGPTLogoProps {
+interface TaxAILogoProps {
   className?: string
   size?: 'sm' | 'md' | 'lg'
   showText?: boolean
 }
 
-export default function TaxGPTLogo({ className, size = 'md', showText = true }: TaxGPTLogoProps) {
+export default function TaxAILogo({ className, size = 'md', showText = true }: TaxAILogoProps) {
   const textSizes = {
     sm: 'text-lg',
     md: 'text-xl',
@@ -27,13 +27,13 @@ export default function TaxGPTLogo({ className, size = 'md', showText = true }: 
             "font-semibold tracking-tight text-white",
             textSizes[size]
           )}>
-            taxgpt
+            TaxAI
           </span>
         )}
         {/* Lime green arrow icon */}
         <svg
           className={cn(
-            "absolute -top-1 -right-4 text-taxgpt-lime",
+            "absolute -top-1 -right-4 text-brand-lime",
             arrowSizes[size]
           )}
           viewBox="0 0 24 24"
@@ -52,7 +52,7 @@ export default function TaxGPTLogo({ className, size = 'md', showText = true }: 
 }
 
 // Icon-only version for smaller spaces
-export function TaxGPTIcon({ className, size = 'md' }: { className?: string; size?: 'sm' | 'md' | 'lg' }) {
+export function TaxAIIcon({ className, size = 'md' }: { className?: string; size?: 'sm' | 'md' | 'lg' }) {
   const sizeClasses = {
     sm: 'w-6 h-6',
     md: 'w-8 h-8',
@@ -61,12 +61,12 @@ export function TaxGPTIcon({ className, size = 'md' }: { className?: string; siz
 
   return (
     <div className={cn(
-      "flex items-center justify-center rounded-lg bg-taxgpt-dark border border-taxgpt-lime/30",
+      "flex items-center justify-center rounded-lg bg-brand-dark border border-brand-lime/30",
       sizeClasses[size],
       className
     )}>
       <svg
-        className="w-4 h-4 text-taxgpt-lime"
+        className="w-4 h-4 text-brand-lime"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"

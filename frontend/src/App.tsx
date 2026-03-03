@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import ChatWindow from './components/ChatWindow'
 import FileUpload from './components/FileUpload'
-import TaxGPTLogo from './components/TaxGPTLogo'
+import TaxAILogo from './components/TaxAILogo'
 import { cn } from './lib/utils'
 import {
   MessageSquare,
@@ -28,7 +28,7 @@ function App() {
           <div className="flex items-center justify-between">
             {/* Logo and Brand */}
             <div className="flex items-center gap-4">
-              <TaxGPTLogo size="lg" />
+              <TaxAILogo size="lg" />
               <div className="hidden sm:block h-6 w-px bg-white/10" />
               <span className="hidden sm:block text-sm text-muted-foreground">
                 Financial Intelligence

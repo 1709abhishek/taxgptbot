@@ -41,8 +41,8 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // TaxGPT brand colors
-        taxgpt: {
+        // Brand colors
+        brand: {
           lime: "#c4e538",
           dark: "#0f0f0f",
           gray: "#1a1a1a",
