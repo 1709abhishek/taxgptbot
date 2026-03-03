@@ -6,7 +6,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18+-61DAFB.svg)](https://reactjs.org/)
 
-[Demo Video](https://www.loom.com/share/ca937286f2f64c5aabc0133c34ead84c) | [Live Demo](https://taxgptbot.vercel.app/) | [Evaluation Results](#evaluation-results) | [API Docs](#api-reference)
+[Live Demo](https://taxgptbot.vercel.app/) | [Evaluation Results](#evaluation-results) | [API Docs](#api-reference)
 
 ---
 
