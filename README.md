@@ -1,4 +1,4 @@
-# TaxGPT Financial Chatbot
+# TaxAI - Financial Intelligence Chatbot
 
 > **Hybrid RAG Chatbot** combining Vector Search + Knowledge Graph for accurate financial Q&A
 
@@ -29,8 +29,8 @@
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/1709abhishek/taxgptbot.git
-cd taxgptbot
+git clone <your-repo-url>
+cd taxai
 
 # 2. Set up environment variables
 cp .env.example backend/.env
@@ -53,7 +53,7 @@ docker-compose up --build
 **Pre-built Data Download:**
 | File | Contents | Size |
 |------|----------|------|
-| [taxgpt-data.tar.gz](https://drive.google.com/file/d/1qiCbwuwx42Eqyzw9mGL5r6MOt3DxDF49/view?usp=sharing) | ChromaDB (100K vectors) + graph.pkl (5K nodes) | 514 MB |
+| [taxai-data.tar.gz](https://drive.google.com/file/d/1qiCbwuwx42Eqyzw9mGL5r6MOt3DxDF49/view?usp=sharing) | ChromaDB (100K vectors) + graph.pkl (5K nodes) | 514 MB |
 
 The app will be available at:
 - **Frontend**: http://localhost:3000
@@ -444,10 +444,10 @@ flowchart LR
 
 | Source | Questions | Found | Rate |
 |--------|-----------|-------|------|
-| tax_data_taxgpt.csv | 7 | 5 | 71% |
-| i1040gi_taxgpt.pdf | 23 | 19 | 83% |
-| usc26@118-78_taxgpt.pdf | 7 | 7 | **100%** |
-| MIC_3e_Ch11_taxgpt.ppt | 4 | 4 | **100%** |
+| tax_data.csv | 7 | 5 | 71% |
+| i1040gi.pdf | 23 | 19 | 83% |
+| usc26@118-78.pdf | 7 | 7 | **100%** |
+| MIC_3e_Ch11.ppt | 4 | 4 | **100%** |
 
 ### Improvement History
 
@@ -514,7 +514,7 @@ Content-Type: application/json
   "confidence": 0.85,
   "sources": [
     {
-      "file": "i1040gi_taxgpt.pdf",
+      "file": "i1040gi.pdf",
       "page": 12,
       "snippet": "Your adjusted gross income (AGI) is...",
       "score": 0.87
@@ -698,7 +698,7 @@ curl -s -X POST http://localhost:8000/api/chat \
   "confidence": 0.85,
   "sources": [
     {
-      "file": "i1040gi_taxgpt.pdf",
+      "file": "i1040gi.pdf",
       "page": 12,
       "snippet": "Your adjusted gross income (AGI) is...",
       "score": 0.87
@@ -738,7 +738,7 @@ The evaluation dataset (`backend/tests/eval_dataset.json`) follows this structur
       "id": 1,
       "question": "What are the different taxpayer types?",
       "expected_answer": "The taxpayer types are: Individual, Corporation...",
-      "source_file": "tax_data_taxgpt.csv",
+      "source_file": "tax_data.csv",
       "type": "simple_lookup",
       "difficulty": "easy",
       "retrieval_type": "graph"
@@ -895,7 +895,7 @@ flowchart TD
 ## Project Structure
 
 ```
-taxgpt-financial-chatbot/
+taxai-chatbot/
 ├── README.md
 ├── docker-compose.yml
 ├── .env.example
@@ -991,4 +991,4 @@ Every design decision includes:
 
 ---
 
-*Built for TaxGPT Backend Engineering Assignment - February 2026*
+*A portfolio project demonstrating Hybrid RAG architecture for financial document Q&A*
